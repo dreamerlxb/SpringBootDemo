@@ -66,13 +66,12 @@ public class AuthController {
 
 	/**
 	 * 注册用户
-	 * @param addedUser
+	 * @param user
 	 * @return
 	 * @throws AuthenticationException
 	 */
 	@PostMapping(value = "auth/register")
 	public User register(@RequestBody User user) throws AuthenticationException {
-//		System.out.println("user -> ");
 		System.out.println(user);
 		return authService.register(user);
 	}

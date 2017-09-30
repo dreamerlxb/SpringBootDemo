@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.lxb.demo.controller.UsernameAlreadyExistsException;
 import com.lxb.demo.security.JwtTokenUtil;
 import com.lxb.demo.security.JwtUser;
 import com.lxb.demo.user.User;
@@ -40,10 +41,11 @@ public class AuthServiceImpl implements AuthService {
 	}
 
 	@Override
-	public User register(User u) {
+	public User register(User u) throws UsernameAlreadyExistsException {
 		final String username = u.getUsername();
+//		 判断用户名是否存在，如果已经存在，那么直接抛异常
 		if (userRepository.findByUsername(username) != null) {
-			return null;
+			throw new UsernameAlreadyExistsException("该用户名已经被注册");
 		}
 		BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 		final String rawPassword = u.getPassword();

@@ -18,10 +18,10 @@ public class UserRepository {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	public User findByUsername(final String username) {
-		String sql = "SELECT * FROM users WHERE username = :username";
+		String sql = "SELECT * FROM users WHERE username = :username ";
 		Map<String, Object> paramMap = new HashMap<>();
 		paramMap.put("username", username);
-		// return namedParameterJdbcTemplate.queryForObject(sql, paramMap, User.class);
+		
 		return namedParameterJdbcTemplate.query(sql, paramMap, new ResultSetExtractor<User>() {
 			@Override
 			public User extractData(ResultSet rs) throws SQLException, DataAccessException {

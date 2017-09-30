@@ -1,5 +1,6 @@
 package com.lxb.demo.auth;
 
+import com.lxb.demo.controller.UsernameAlreadyExistsException;
 import com.lxb.demo.user.User;
 
 public interface AuthService {
@@ -8,7 +9,7 @@ public interface AuthService {
 	 * @param userToAdd
 	 * @return
 	 */
-    User register(User userToAdd);
+    User register(User userToAdd) throws UsernameAlreadyExistsException;
     /**
      * 用户登录
      * @param username

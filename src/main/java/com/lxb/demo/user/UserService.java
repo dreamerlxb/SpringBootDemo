@@ -24,21 +24,22 @@ public class UserService {
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
 	public List<User> findUsers(User u) {
-		StringBuilder sql = new StringBuilder("SELECT * FROM users ");
+		StringBuilder sqlSb = new StringBuilder("SELECT * FROM users ");
 		Map<String, Object> paramMap = new HashMap<>();
 		if (!StringUtils.isEmpty(u.getUsername())) {
-			sql.append("AND name LIKE '%:username%' ");
+			sqlSb.append("AND name LIKE '%:username%' ");
 			paramMap.put("username", u.getUsername());
 		}
 		if (!StringUtils.isEmpty(u.getNickname())) {
-			sql.append("AND nickname LIKE '%:nickname%' ");
+			sqlSb.append("AND nickname LIKE '%:nickname%' ");
 			paramMap.put("nickname", u.getNickname());
 		}
 		if (!StringUtils.isEmpty(u.getEmail())) {
-			sql.append("AND email LIKE '%:email%' ");
+			sqlSb.append("AND email LIKE '%:email%' ");
 			paramMap.put("email", u.getEmail());
 		}
-		return namedParameterJdbcTemplate.query(sql.toString().replaceFirst("AND", "WHERE"), paramMap,
+		String sql = sqlSb.toString().replaceFirst("AND", "WHERE");
+		return namedParameterJdbcTemplate.query(sql, paramMap,
 				new RowMapper<User>() {
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -128,25 +129,25 @@ public class UserService {
 	 * @return
 	 */
 	public int updateUser(User u) {
-		StringBuilder sql = new StringBuilder("UPDATE users ");
+		StringBuilder sqlSb = new StringBuilder("UPDATE users ");
 		Map<String, Object> paramMap = new HashMap<>();
 		if (!StringUtils.isEmpty(u.getUsername())) {
-			sql.append(", username = :username ");
+			sqlSb.append(", username = :username ");
 			paramMap.put("username", u.getUsername());
 		}
 		if (!StringUtils.isEmpty(u.getNickname())) {
-			sql.append(", nickname = :nickname ");
+			sqlSb.append(", nickname = :nickname ");
 			paramMap.put("nickname", u.getNickname());
 		}
 		if (!StringUtils.isEmpty(u.getEmail())) {
-			sql.append(", email = :email ");
+			sqlSb.append(", email = :email ");
 			paramMap.put("email", u.getEmail());
 		}
-		sql.append("WHERE id = :id");
+		sqlSb.append("WHERE id = :id ");
 		paramMap.put("id", u.getId());
-		System.out.println(sql.toString());
-		String s = sql.toString().replaceFirst(",", "SET");
-		return namedParameterJdbcTemplate.update(s, paramMap);
+		String sql = sqlSb.toString().replaceFirst(",", "SET");
+		System.out.println(sql);
+		return namedParameterJdbcTemplate.update(sql, paramMap);
 	}
 
 	/**
