@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
-@Component
+@Component("authenticationEntryPoint")
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 
 	private static final long serialVersionUID = -8970718410437077606L;
@@ -21,6 +21,11 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Se
 		// supplying any credentials
 		// We should just send a 401 Unauthorized response because there is no 'login
 		// page' to redirect to
+//		response.setCharacterEncoding("UTF-8");
+//		response.setContentType("application/json");
+//
+//		response.getWriter().println("{\"code\":401,\"message\":\"没有携带 token 或者 token 无效！\",\"data\":\"\"}");
+//		response.getWriter().flush();
 		response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized");
 	}
 }

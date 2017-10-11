@@ -25,8 +25,13 @@ public class JwtTokenUtil implements Serializable {
 	private String secret;
 
 	@Value("${jwt.expiration}")
-	private Long expiration;
+	private Long expiration; // 过期时间
 
+	/**
+	 * 从token中获取用户名
+	 * @param token
+	 * @return
+	 */
 	public String getUsernameFromToken(String token) {
 		String username;
 		try {
@@ -37,7 +42,12 @@ public class JwtTokenUtil implements Serializable {
 		}
 		return username;
 	}
-
+	
+	/**
+	 * 从token中获取token创建时间
+	 * @param token
+	 * @return
+	 */
 	public Date getCreatedDateFromToken(String token) {
 		Date created;
 		try {
@@ -49,6 +59,11 @@ public class JwtTokenUtil implements Serializable {
 		return created;
 	}
 
+	/**
+	 * 从token中获取过期时间
+	 * @param token
+	 * @return
+	 */
 	public Date getExpirationDateFromToken(String token) {
 		Date expiration;
 		try {
@@ -69,32 +84,68 @@ public class JwtTokenUtil implements Serializable {
 		}
 		return claims;
 	}
-
+	
+	/**
+	 * 生成过期日期
+	 * @return
+	 */
 	private Date generateExpirationDate() {
 		return new Date(System.currentTimeMillis() + expiration * 1000);
 	}
 
+	/**
+	 * 判断token是否过期
+	 * @param token
+	 * @return
+	 */
 	private Boolean isTokenExpired(String token) {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
-
+	
+	/**
+	 * 判断token的创建时间是否早于上次密码修改时间，如果是，那么token将失效
+	 * @param created
+	 * @param lastPasswordReset
+	 * @return
+	 */
 	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
 		return (lastPasswordReset != null && created.before(lastPasswordReset));
 	}
-
+	
+	/**
+	 * 根据用户信息创建token
+	 * @param userDetails
+	 * @return
+	 */
 	public String generateToken(UserDetails userDetails) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
 		claims.put(CLAIM_KEY_CREATED, new Date());
 		return generateToken(claims);
 	}
-
-	String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
-				.signWith(SignatureAlgorithm.HS512, secret).compact();
+	
+	public String generateToken(String username) {
+		Map<String, Object> claims = new HashMap<>();
+		claims.put(CLAIM_KEY_USERNAME, username);
+		claims.put(CLAIM_KEY_CREATED, new Date());
+		return generateToken(claims);
 	}
 
+	private String generateToken(Map<String, Object> claims) {
+		return Jwts.builder()
+					.setClaims(claims)
+					.setExpiration(generateExpirationDate())
+					.signWith(SignatureAlgorithm.HS512, secret)
+					.compact();
+	}
+
+	/**
+	 * 判断token是否可以刷新
+	 * @param token
+	 * @param lastPasswordReset
+	 * @return
+	 */
 	public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
 		final Date created = getCreatedDateFromToken(token);
 		return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset) && !isTokenExpired(token);
