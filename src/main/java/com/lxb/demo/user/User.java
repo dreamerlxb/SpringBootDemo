@@ -34,7 +34,6 @@ public class User {
 		this.roles = roles;
 	}
 
-	@JsonIgnore
 	public String getPassword() {
 		return password;
 	}
