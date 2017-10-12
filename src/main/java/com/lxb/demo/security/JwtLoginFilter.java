@@ -19,6 +19,11 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * 登录拦截器
+ * @author lion
+ *
+ */
 @Component
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	
@@ -33,7 +38,10 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		this(new AntPathRequestMatcher("/login", "POST"));
 		this.setAuthenticationManager(authenticationManager);
 	}
-
+	
+	/**
+	 * 认证用户
+	 */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
@@ -44,6 +52,9 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 		return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
 	}
 
+	/**
+	 * 认证成功
+	 */
 	@Override
 	protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain,
 			Authentication authResult) throws IOException, ServletException {
