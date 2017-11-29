@@ -8,10 +8,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
@@ -22,25 +25,32 @@ public class UserService {
 
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+	
+	@Autowired
+	private UserRepository userRepository;
+	
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
 
 	public List<User> findUsers(User u) {
 		StringBuilder sqlSb = new StringBuilder("SELECT * FROM users ");
 		Map<String, Object> paramMap = new HashMap<>();
 		if (!StringUtils.isEmpty(u.getUsername())) {
-			sqlSb.append("AND name LIKE '%:username%' ");
+			sqlSb.append("AND name LIKE '%' :username '%' ");
 			paramMap.put("username", u.getUsername());
 		}
 		if (!StringUtils.isEmpty(u.getNickname())) {
-			sqlSb.append("AND nickname LIKE '%:nickname%' ");
+			sqlSb.append("AND nickname LIKE '%' :nickname '%' ");
 			paramMap.put("nickname", u.getNickname());
 		}
 		if (!StringUtils.isEmpty(u.getEmail())) {
-			sqlSb.append("AND email LIKE '%:email%' ");
+			sqlSb.append("AND email LIKE '%' :email '%' ");
 			paramMap.put("email", u.getEmail());
 		}
 		String sql = sqlSb.toString().replaceFirst("AND", "WHERE");
-		return namedParameterJdbcTemplate.query(sql, paramMap,
-				new RowMapper<User>() {
+		return namedParameterJdbcTemplate.query(sql, paramMap, new RowMapper<User>() {
 					@Override
 					public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 						User u = new User();
@@ -81,11 +91,8 @@ public class UserService {
 	 * @return 如果返回值>0，说明添加成功，否则说明添加失败
 	 */
 	public int addUser(User u) {
-		String sql = "INSERT INTO users (username, email, nickname)" + " values (?,?,?)";
-		Object args[] = { u.getUsername(), u.getEmail(), u.getNickname() };
-		// result > 0 成功 否则 失败
-		int result = jdbcTemplate.update(sql, args);
-		return result;
+		u.setPassword(passwordEncoder().encode(u.getPassword()));
+		return userRepository.insert(u);
 	}
 
 	/**

@@ -2,18 +2,18 @@ package com.lxb.demo.security;
 
 import java.io.Serializable;
 
-public class JwtAuthenticationRequest implements Serializable {
+public class JwtAuthRequest implements Serializable {
 
 	private static final long serialVersionUID = -8445943548965154778L;
 
 	private String username;
 	private String password;
 
-	public JwtAuthenticationRequest() {
+	public JwtAuthRequest() {
 		super();
 	}
 
-	public JwtAuthenticationRequest(String username, String password) {
+	public JwtAuthRequest(String username, String password) {
 		this.setUsername(username);
 		this.setPassword(password);
 	}
@@ -32,5 +32,10 @@ public class JwtAuthenticationRequest implements Serializable {
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	@Override
+	public String toString() {
+		return "JwtAuthRequest [username=" + username + ", password=" + password + "]";
 	}
 }

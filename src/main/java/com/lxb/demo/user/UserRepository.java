@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class UserRepository {
+	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
@@ -32,7 +33,7 @@ public class UserRepository {
 					u.setUsername(rs.getString("username"));
 					u.setNickname(rs.getString("nickname"));
 					u.setPassword(rs.getString("password"));
-					u.setLastPasswordResetDate(rs.getDate("lastPasswordResetDate"));
+					u.setLastPasswordResetDate(rs.getDate("last_pwd_reset_date"));
 					return u;
 				}
 				return null;

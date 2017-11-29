@@ -37,7 +37,6 @@ public class AuthServiceImpl implements AuthService {
 		this.userDetailsService = userDetailsService;
 		this.jwtTokenUtil = jwtTokenUtil;
 		this.userRepository = userRepository;
-	//	this.roleRepository = roleRepository;
 	}
 
 	@Override

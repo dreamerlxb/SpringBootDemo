@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lxb.demo.security.JwtAuthenticationRequest;
-import com.lxb.demo.security.JwtAuthenticationResponse;
+import com.lxb.demo.security.JwtAuthRequest;
+import com.lxb.demo.security.JwtAuthResponse;
 import com.lxb.demo.user.User;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,13 +37,12 @@ public class AuthController {
 	 * @throws AuthenticationException
 	 */
 	@RequestMapping(value = "auth", method = RequestMethod.POST)
-	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthenticationRequest authenticationRequest)
+	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthRequest authenticationRequest)
 			throws AuthenticationException {
 		final String token = authService.login(authenticationRequest.getUsername(),
 				authenticationRequest.getPassword());
-
 		// Return the token
-		return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+		return ResponseEntity.ok(new JwtAuthResponse(token));
 	}
 	
 	/**
@@ -60,7 +59,7 @@ public class AuthController {
 		if (refreshedToken == null) {
 			return ResponseEntity.badRequest().body(null);
 		} else {
-			return ResponseEntity.ok(new JwtAuthenticationResponse(refreshedToken));
+			return ResponseEntity.ok(new JwtAuthResponse(refreshedToken));
 		}
 	}
 

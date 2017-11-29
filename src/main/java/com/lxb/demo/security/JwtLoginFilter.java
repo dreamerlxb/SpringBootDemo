@@ -17,6 +17,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -45,7 +46,17 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
 			throws AuthenticationException, IOException, ServletException {
-		JwtAuthenticationRequest user = new ObjectMapper().readValue(request.getInputStream(), JwtAuthenticationRequest.class);
+		ObjectMapper om = new ObjectMapper();
+		JwtAuthRequest user = null;
+		try {
+			user = om.readValue(request.getInputStream(), JwtAuthRequest.class);
+		} catch (JsonMappingException e) {
+			System.out.println(e);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		System.out.println(user);
+		
 		String username = user.getUsername();
 		String password = user.getPassword();
 
