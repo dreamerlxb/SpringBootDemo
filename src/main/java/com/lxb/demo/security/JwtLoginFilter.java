@@ -22,24 +22,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * 登录拦截器
+ * 
  * @author lion
  *
  */
 @Component
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
-	
+
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
 	protected JwtLoginFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
 		super(requiresAuthenticationRequestMatcher);
 	}
+
 	@Autowired
 	public JwtLoginFilter(AuthenticationManager authenticationManager) {
 		this(new AntPathRequestMatcher("/login", "POST"));
 		this.setAuthenticationManager(authenticationManager);
 	}
-	
+
 	/**
 	 * 认证用户
 	 */
@@ -56,11 +58,12 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			e.printStackTrace();
 		}
 		System.out.println(user);
-		
+
 		String username = user.getUsername();
 		String password = user.getPassword();
 
-		return this.getAuthenticationManager().authenticate(new UsernamePasswordAuthenticationToken(username, password));
+		return this.getAuthenticationManager()
+				.authenticate(new UsernamePasswordAuthenticationToken(username, password));
 	}
 
 	/**
@@ -71,7 +74,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 			Authentication authResult) throws IOException, ServletException {
 		JwtUser u = (JwtUser) authResult.getPrincipal();
 		String token = jwtTokenUtil.generateToken(u.getUsername());
-		//String n = authResult.getName();
+		// String n = authResult.getName();
 		response.addHeader("Authorization", "token=" + token);
 	}
 }

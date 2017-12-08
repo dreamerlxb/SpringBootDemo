@@ -17,7 +17,7 @@ import com.lxb.demo.user.UserRepository;
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private RoleRepository roleRepository;
 
@@ -29,13 +29,9 @@ public class JwtUserDetailsServiceImpl implements UserDetailsService {
 		} else {
 			List<Role> roles = roleRepository.findRolesByUser(user);
 			user.setRoles(roles);
-			
-			JwtUser jwtUser = new JwtUser(user.getId(),
-											user.getUsername(),
-											user.getPassword(),
-											user.getEmail(),
-											user.getRoles(),
-											user.getLastPasswordResetDate());
+
+			JwtUser jwtUser = new JwtUser(user.getId(), user.getUsername(), user.getPassword(), user.getEmail(),
+					user.getRoles(), user.getLastPasswordResetDate());
 			return jwtUser;
 		}
 	}

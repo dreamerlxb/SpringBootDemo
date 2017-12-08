@@ -29,6 +29,7 @@ public class JwtTokenUtil implements Serializable {
 
 	/**
 	 * 从token中获取用户名
+	 * 
 	 * @param token
 	 * @return
 	 */
@@ -42,9 +43,10 @@ public class JwtTokenUtil implements Serializable {
 		}
 		return username;
 	}
-	
+
 	/**
 	 * 从token中获取token创建时间
+	 * 
 	 * @param token
 	 * @return
 	 */
@@ -61,6 +63,7 @@ public class JwtTokenUtil implements Serializable {
 
 	/**
 	 * 从token中获取过期时间
+	 * 
 	 * @param token
 	 * @return
 	 */
@@ -84,9 +87,10 @@ public class JwtTokenUtil implements Serializable {
 		}
 		return claims;
 	}
-	
+
 	/**
 	 * 生成过期日期
+	 * 
 	 * @return
 	 */
 	private Date generateExpirationDate() {
@@ -95,6 +99,7 @@ public class JwtTokenUtil implements Serializable {
 
 	/**
 	 * 判断token是否过期
+	 * 
 	 * @param token
 	 * @return
 	 */
@@ -102,9 +107,10 @@ public class JwtTokenUtil implements Serializable {
 		final Date expiration = getExpirationDateFromToken(token);
 		return expiration.before(new Date());
 	}
-	
+
 	/**
 	 * 判断token的创建时间是否早于上次密码修改时间，如果是，那么token将失效
+	 * 
 	 * @param created
 	 * @param lastPasswordReset
 	 * @return
@@ -112,9 +118,10 @@ public class JwtTokenUtil implements Serializable {
 	private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
 		return (lastPasswordReset != null && created.before(lastPasswordReset));
 	}
-	
+
 	/**
 	 * 根据用户信息创建token
+	 * 
 	 * @param userDetails
 	 * @return
 	 */
@@ -124,7 +131,7 @@ public class JwtTokenUtil implements Serializable {
 		claims.put(CLAIM_KEY_CREATED, new Date());
 		return generateToken(claims);
 	}
-	
+
 	public String generateToken(String username) {
 		Map<String, Object> claims = new HashMap<>();
 		claims.put(CLAIM_KEY_USERNAME, username);
@@ -133,15 +140,13 @@ public class JwtTokenUtil implements Serializable {
 	}
 
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder()
-					.setClaims(claims)
-					.setExpiration(generateExpirationDate())
-					.signWith(SignatureAlgorithm.HS512, secret)
-					.compact();
+		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
+				.signWith(SignatureAlgorithm.HS512, secret).compact();
 	}
 
 	/**
 	 * 判断token是否可以刷新
+	 * 
 	 * @param token
 	 * @param lastPasswordReset
 	 * @return

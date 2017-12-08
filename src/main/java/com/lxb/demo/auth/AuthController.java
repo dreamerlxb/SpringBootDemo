@@ -19,7 +19,8 @@ import javax.servlet.http.HttpServletRequest;
 /**
  * 
  * token
- * @author lion
+ * 
+ * @author lxb
  *
  */
 
@@ -30,13 +31,15 @@ public class AuthController {
 
 	@Autowired
 	private AuthService authService;
+
 	/**
 	 * 认证用户
+	 * 
 	 * @param authenticationRequest
 	 * @return
 	 * @throws AuthenticationException
 	 */
-	@RequestMapping(value = "auth", method = RequestMethod.POST)
+	@RequestMapping(value = { "auth", "login" }, method = RequestMethod.POST)
 	public ResponseEntity<?> createAuthenticationToken(@RequestBody JwtAuthRequest authenticationRequest)
 			throws AuthenticationException {
 		final String token = authService.login(authenticationRequest.getUsername(),
@@ -44,9 +47,10 @@ public class AuthController {
 		// Return the token
 		return ResponseEntity.ok(new JwtAuthResponse(token));
 	}
-	
+
 	/**
 	 * 刷新token
+	 * 
 	 * @param request
 	 * @return
 	 * @throws AuthenticationException
@@ -65,6 +69,7 @@ public class AuthController {
 
 	/**
 	 * 注册用户
+	 * 
 	 * @param user
 	 * @return
 	 * @throws AuthenticationException

@@ -42,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 	@Override
 	public User register(User u) throws UsernameAlreadyExistsException {
 		final String username = u.getUsername();
-//		 判断用户名是否存在，如果已经存在，那么直接抛异常
+		// 判断用户名是否存在，如果已经存在，那么直接抛异常
 		if (userRepository.findByUsername(username) != null) {
 			throw new UsernameAlreadyExistsException("该用户名已经被注册");
 		}
@@ -50,9 +50,9 @@ public class AuthServiceImpl implements AuthService {
 		final String rawPassword = u.getPassword();
 		u.setPassword(encoder.encode(rawPassword));
 		u.setLastPasswordResetDate(new Date());
-//		如果注册用户成功
+		// 如果注册用户成功
 		User tmpUser = null;
-		if(userRepository.insert(u) > 0) {
+		if (userRepository.insert(u) > 0) {
 			tmpUser = userRepository.findByUsername(username);
 		}
 		return tmpUser;
