@@ -75,7 +75,7 @@ public class AuthController {
 	 * @throws AuthenticationException
 	 */
 	@PostMapping(value = "auth/register")
-	public User register(@RequestBody User user) throws AuthenticationException {
+	public User register( User user) throws AuthenticationException {
 		System.out.println(user);
 		return authService.register(user);
 	}

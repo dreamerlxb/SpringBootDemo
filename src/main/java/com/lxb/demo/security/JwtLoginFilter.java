@@ -14,8 +14,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
-import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,19 +24,19 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author lion
  *
  */
-@Component
+//@Component
 public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
 
-	protected JwtLoginFilter(RequestMatcher requiresAuthenticationRequestMatcher) {
-		super(requiresAuthenticationRequestMatcher);
+	protected JwtLoginFilter() {
+		super(new AntPathRequestMatcher("/login", "POST"));
 	}
 
-	@Autowired
+//	@Autowired
 	public JwtLoginFilter(AuthenticationManager authenticationManager) {
-		this(new AntPathRequestMatcher("/login", "POST"));
+		this();
 		this.setAuthenticationManager(authenticationManager);
 	}
 
@@ -47,7 +45,7 @@ public class JwtLoginFilter extends AbstractAuthenticationProcessingFilter {
 	 */
 	@Override
 	public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
-			throws AuthenticationException, IOException, ServletException {
+			throws AuthenticationException {
 		ObjectMapper om = new ObjectMapper();
 		JwtAuthRequest user = null;
 		try {

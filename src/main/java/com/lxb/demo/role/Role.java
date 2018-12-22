@@ -1,27 +1,67 @@
 package com.lxb.demo.role;
 
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Table;
+
 import org.springframework.security.core.GrantedAuthority;
 
-public class Role implements GrantedAuthority{
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.lxb.demo.user.User;
+
+@Entity
+@Table(name = "t_role")
+public class Role implements GrantedAuthority {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long id;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+
+	@Column(name = "name")
 	private String name;
+
+	@Column(name = "role_key")
+	private String roleKey;
+
+	@Column(name = "description")
+	private String description;
+
+	@Column(name = "remark")
+	private String remark;
+
+	/**
+	 * User n:n Role
+	 */
+	@ManyToMany(fetch = FetchType.LAZY, targetEntity = User.class)
+	@JoinTable(name = "t_user_role", joinColumns = { @JoinColumn(name = "role_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "user_id") })
+	private List<User> users;
 
 	public Role(String name) {
 		this.name = name;
 	}
-	
+
 	public Role() {
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -34,13 +74,41 @@ public class Role implements GrantedAuthority{
 	}
 
 	@Override
-	public String toString() {
-		return "Role [id=" + id + ", name=" + name + "]";
-	}
-
-	@Override
 	public String getAuthority() {
 		return name;
+	}
+
+	public String getRoleKey() {
+		return roleKey;
+	}
+
+	public void setRoleKey(String roleKey) {
+		this.roleKey = roleKey;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	@JsonIgnore
+	public List<User> getUsers() {
+		return users;
+	}
+
+	public void setUsers(List<User> users) {
+		this.users = users;
 	}
 
 	@Override
@@ -66,5 +134,11 @@ public class Role implements GrantedAuthority{
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Role [id=" + id + ", name=" + name + ", roleKey=" + roleKey + ", description=" + description
+				+ ", remark=" + remark + "]";
 	}
 }

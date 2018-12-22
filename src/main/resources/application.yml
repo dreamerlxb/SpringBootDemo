@@ -1,0 +1,56 @@
+jwt:
+  expiration: 604800
+  header: Authorization
+  secret: mySecret
+  tokenHead: token
+logging:
+  file: demo.log
+  level:
+    org:
+      hibernate: ERROR
+      springframework:
+        web: DEBUG
+    root: INFO
+mail:
+  from: 1558485399@qq.com
+spring:
+  datasource:
+    dbcp2:
+      connection-properties: characterEncoding=utf8
+      initial-size: 5
+      max-idle: 50
+      max-wait-millis: 10000
+      validation-query: SELECT 1
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    password: 12345678
+    type: org.apache.commons.dbcp2.BasicDataSource
+    url: jdbc:mysql://127.0.0.1:3306/lxb_forum?characterEncoding=utf8mb4
+    username: root
+  jpa:
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        format_sql: true
+        show_sql: true
+    show-sql: true
+  mail:
+    default-encoding: UTF-8
+    host: smtp.qq.com
+    password: mztqxdcdiczpjgfd
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+            required: true
+    username: 1558485399@qq.com
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB

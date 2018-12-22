@@ -1,10 +1,12 @@
 package com.lxb.demo.security;
 
 import java.io.Serializable;
+import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -139,9 +141,17 @@ public class JwtTokenUtil implements Serializable {
 		return generateToken(claims);
 	}
 
+//	static final Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+
 	private String generateToken(Map<String, Object> claims) {
-		return Jwts.builder().setClaims(claims).setExpiration(generateExpirationDate())
-				.signWith(SignatureAlgorithm.HS512, secret).compact();
+		Key key = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+		
+		return Jwts.builder()
+				.setClaims(claims)
+				.setExpiration(generateExpirationDate())
+//				.signWith(SignatureAlgorithm.HS512, secret)
+				.signWith(key)
+				.compact();
 	}
 
 	/**

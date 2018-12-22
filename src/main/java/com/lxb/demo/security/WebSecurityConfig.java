@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.lxb.demo.auth.AuthService;
+import com.lxb.demo.auth.AuthServiceImpl;
+
 @Configuration
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
@@ -22,11 +25,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private JwtAuthenticationEntryPoint authenticationEntryPoint;
+	
 	@Autowired
 	private JwtAccessDeniedHandler accessDeniedHandler;
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailsService jwtUserDetailsService;
 
 	// @Autowired
 	// public void configureAuthentication(AuthenticationManagerBuilder
@@ -44,8 +48,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Bean
 	public JwtLoginFilter loginFilterBean() throws Exception {
-		JwtLoginFilter loginFilter = new JwtLoginFilter(authenticationManager());
-		return loginFilter;
+		return new JwtLoginFilter(authenticationManager());
+	}
+	
+	@Bean
+	public AuthService authService() throws Exception {
+		return new AuthServiceImpl(authenticationManager());
 	}
 
 	@Override
@@ -90,6 +98,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		super.configure(auth);
-		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder);
 	}
 }
