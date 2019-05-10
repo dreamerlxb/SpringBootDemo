@@ -1,5 +1,6 @@
 package com.lxb.demo;
 
+import com.lxb.demo.service.MailService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class DemoApplicationTests {
 
 	@Autowired
-	private com.lxb.demo.mail.MailService mailService;
+	private MailService mailService;
 
 	@Test
 	public void contextLoads() {

@@ -20,7 +20,7 @@ public class FileUtils {
 				uploadFilePath.indexOf('.'));
 		System.out.println("文件名 --> " + uploadFileName);
 		// 截取上传文件的后缀
-		String uploadFileSuffix = uploadFilePath.substring(uploadFilePath.indexOf('.') + 1, uploadFilePath.length());
+		String uploadFileSuffix = uploadFilePath.substring(uploadFilePath.indexOf('.') + 1);
 		System.out.println("文件后缀 --> " + uploadFileSuffix);
 
 		File dest = new File(".//uploadFiles//" + uploadFileName + "." + uploadFileSuffix);

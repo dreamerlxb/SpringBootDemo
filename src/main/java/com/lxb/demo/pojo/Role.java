@@ -1,4 +1,4 @@
-package com.lxb.demo.role;
+package com.lxb.demo.pojo;
 
 import java.util.List;
 
@@ -16,7 +16,6 @@ import javax.persistence.Table;
 import org.springframework.security.core.GrantedAuthority;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lxb.demo.user.User;
 
 @Entity
 @Table(name = "t_role")

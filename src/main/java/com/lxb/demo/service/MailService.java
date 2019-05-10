@@ -1,4 +1,4 @@
-package com.lxb.demo.mail;
+package com.lxb.demo.service;
 
 import java.io.File;
 

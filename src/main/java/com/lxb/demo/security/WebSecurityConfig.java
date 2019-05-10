@@ -15,8 +15,8 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.lxb.demo.auth.AuthService;
-import com.lxb.demo.auth.AuthServiceImpl;
+import com.lxb.demo.service.AuthService;
+import com.lxb.demo.service.impl.AuthServiceImpl;
 
 @Configuration
 @EnableWebSecurity
@@ -86,7 +86,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				// 允许用户登录注册
 				.antMatchers("/auth/**", "/login/**", "/register/**").permitAll()
 				// 除上面外的所有请求全部需要鉴权认证
-				.anyRequest().authenticated();
+				.anyRequest().permitAll();
 
 		// 添加JWT filter
 		httpSecurity.addFilterBefore(loginFilterBean(), UsernamePasswordAuthenticationFilter.class);

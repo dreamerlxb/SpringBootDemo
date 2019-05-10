@@ -1,5 +1,6 @@
-package com.lxb.demo.auth;
+package com.lxb.demo.service.impl;
 
+import com.lxb.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,10 +12,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.lxb.demo.controller.UsernameAlreadyExistsException;
-import com.lxb.demo.user.UserRepository;
+import com.lxb.demo.repository.UserRepository;
 import com.lxb.demo.security.JwtTokenUtil;
-import com.lxb.demo.security.JwtUser;
-import com.lxb.demo.user.User;
+import com.lxb.demo.pojo.JwtUser;
+import com.lxb.demo.pojo.User;
 
 import java.util.Date;
 

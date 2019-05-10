@@ -1,4 +1,4 @@
-package com.lxb.demo.user;
+package com.lxb.demo.pojo;
 
 import java.util.Date;
 import java.util.List;
@@ -20,7 +20,6 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.lxb.demo.role.Role;
 
 @Entity
 @Table(name = "t_user", uniqueConstraints = { @UniqueConstraint(columnNames = { "username", "phone", "email" }) })

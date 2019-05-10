@@ -1,4 +1,4 @@
-package com.lxb.demo.user;
+package com.lxb.demo.service;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.lxb.demo.pojo.User;
+import com.lxb.demo.pojo.spec.UserSpec;
+import com.lxb.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.domain.Page;
@@ -21,14 +24,20 @@ import org.springframework.util.StringUtils;
 @Service
 public class UserService {
 
-	@Autowired
-	private JdbcTemplate jdbcTemplate;
+	private final JdbcTemplate jdbcTemplate;
+
+	private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
+
+	private final UserRepository userRepository;
 
 	@Autowired
-	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-	@Autowired
-	private UserRepository userRepository;
+	public UserService(JdbcTemplate jdbcTemplate,
+					   NamedParameterJdbcTemplate namedParameterJdbcTemplate,
+					   UserRepository userRepository) {
+		this.jdbcTemplate = jdbcTemplate;
+		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
+		this.userRepository = userRepository;
+	}
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -79,21 +88,6 @@ public class UserService {
 	 * @param id
 	 * @return 用户信息
 	 */
-//	public User findUserById(long id) {
-//		String sql = "SELECT id, username, email, nickname FROM users WHERE id = ?";
-//		return jdbcTemplate.queryForObject(sql, new Object[] { id }, new RowMapper<User>() {
-//			@Override
-//			public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-//				User u = new User();
-//				u.setId(rs.getLong("id"));
-//				u.setEmail(rs.getString("email"));
-//				u.setUsername(rs.getString("username"));
-//				u.setNickname(rs.getString("nickname"));
-//				return u;
-//			}
-//		});
-//	}
-	
 	public User findById(long id) {
 		return userRepository.findById(id).orElse(null);
 	}
@@ -126,8 +120,10 @@ public class UserService {
 	 * @return {@link User}
 	 */
 	public int deleteUserById(long id) {
-		String sql = "DELETE FROM users WHERE id = ?";
-		return jdbcTemplate.update(sql, id);
+		userRepository.deleteById(id);
+//		String sql = "DELETE FROM users WHERE id = ?";
+//		return jdbcTemplate.update(sql, id);
+		return 1;
 	}
 	
 	public void deleteById(long id) {

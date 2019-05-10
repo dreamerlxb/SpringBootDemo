@@ -1,7 +1,7 @@
-package com.lxb.demo.auth;
+package com.lxb.demo.service;
 
 import com.lxb.demo.controller.UsernameAlreadyExistsException;
-import com.lxb.demo.user.User;
+import com.lxb.demo.pojo.User;
 
 public interface AuthService {
 	/**

@@ -21,7 +21,7 @@ import java.io.IOException;
 public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailsService jwtUserDetailsService;
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
@@ -50,7 +50,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
 				// 这种情况下，我们可以不用再查询数据库，而直接采用token中的数据
 				// 本例中，我们还是通过Spring Security的 @UserDetailsService 进行了数据查询
 				// 但简单验证的话，你可以采用直接验证token是否合法来避免昂贵的数据查询
-				UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+				UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
 
 				if (jwtTokenUtil.validateToken(authToken, userDetails)) {
 					UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

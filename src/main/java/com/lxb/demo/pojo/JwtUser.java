@@ -1,4 +1,4 @@
-package com.lxb.demo.security;
+package com.lxb.demo.pojo;
 
 import java.util.Collection;
 import java.util.Date;

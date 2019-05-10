@@ -1,5 +1,6 @@
-package com.lxb.demo.auth;
+package com.lxb.demo.controller;
 
+import com.lxb.demo.service.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.lxb.demo.security.JwtAuthRequest;
 import com.lxb.demo.security.JwtAuthResponse;
-import com.lxb.demo.user.User;
+import com.lxb.demo.pojo.User;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -29,8 +30,12 @@ public class AuthController {
 	@Value("${jwt.header}")
 	private String tokenHeader;
 
+	private final AuthService authService;
+
 	@Autowired
-	private AuthService authService;
+	public AuthController(AuthService authService) {
+		this.authService = authService;
+	}
 
 	/**
 	 * 认证用户

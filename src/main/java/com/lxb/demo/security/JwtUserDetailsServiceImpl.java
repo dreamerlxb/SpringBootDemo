@@ -2,16 +2,17 @@ package com.lxb.demo.security;
 
 import java.util.List;
 
-import com.lxb.demo.user.UserRepository;
+import com.lxb.demo.pojo.JwtUser;
+import com.lxb.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.lxb.demo.role.Role;
-import com.lxb.demo.role.RoleRepository;
-import com.lxb.demo.user.User;
+import com.lxb.demo.pojo.Role;
+import com.lxb.demo.repository.RoleRepository;
+import com.lxb.demo.pojo.User;
 
 @Service("jwtUserDetailsService")
 public class JwtUserDetailsServiceImpl implements UserDetailsService {
